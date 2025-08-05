@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tsinjo - Fonds d'urgence HEI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .donation-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            border: 1px solid #e9ecef;
+        }
+
+        .donation-form h2 {
+            margin-top: 0;
+            color: #495057;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .history-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .history-section h2 {
+            margin-top: 0;
+            color: #495057;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+
+        .history-item {
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 5px solid;
+            background: #f8f9fa;
+            transition: transform 0.2s ease;
+        }
+
+        .history-item:hover {
+            transform: translateX(5px);
+        }
+
+        .history-item.donation {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+
+        .history-item.help {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        }
+
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .history-item-type {
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: white;
+        }
+
+        .history-item-type.donation {
+            background: #28a745;
+        }
+
+        .history-item-type.help {
+            background: #dc3545;
+        }
+
+        .history-item-amount {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .history-item-details {
+            margin-bottom: 8px;
+        }
+
+        .history-item-person {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .history-item-email {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .history-item-payment {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .history-item-description {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            font-style: italic;
+            color: #495057;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .history-item-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Tsinjo</h1>
+    <p>Fonds d'urgence solidaire de HEI - Transparence totale</p>
+</div>
+
+<!-- Messages flash -->
+<div th:if="${successMessage}" class="alert alert-success">
+    <span th:text="${successMessage}"></span>
+</div>
+
+<div th:if="${errorMessage}" class="alert alert-error">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<!-- Formulaire de don -->
+<div class="donation-form">
+    <h2>💝 Faire un don</h2>
+    <form action="/donate" method="post">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required
+                       placeholder="votre.email@example.com">
+            </div>
+            <div class="form-group">
+                <label for="fullName">Nom complet *</label>
+                <input type="text" id="fullName" name="fullName" required
+                       placeholder="Votre nom complet">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="paymentReference">Référence de paiement *</label>
+            <input type="text" id="paymentReference" name="paymentReference" required
+                   placeholder="MP250804.0904.A01637"
+                   title="Utilisez une des références valides fournies">
+        </div>
+
+        <button type="submit" class="btn-primary">Donner !</button>
+    </form>
+</div>
+
+<!-- Historique -->
+<div class="history-section">
+    <h2>📋 Historique</h2>
+
+    <div th:if="${#lists.isEmpty(historyItems)}" class="empty-state">
+        <p>Aucune transaction pour le moment.</p>
+    </div>
+
+    <div th:each="item : ${historyItems}"
+         th:class="'history-item ' + ${item.donation ? 'donation' : 'help'}">
+
+        <div class="history-item-header">
+                <span th:class="'history-item-type ' + ${item.donation ? 'donation' : 'help'}"
+                      th:text="${item.donation ? '+ DON' : '- AIDE'}"></span>
+            <span class="history-item-amount"
+                  th:text="${item.amount != null ? #numbers.formatInteger(item.amount, 0, 'COMMA') + ' Ar' : 'Montant en vérification'}"></span>
+        </div>
+
+        <div class="history-item-details">
+            <div class="history-item-person" th:text="${item.personName}"></div>
+            <div class="history-item-email" th:text="'(' + ${item.personEmail} + ')'"></div>
+            <div class="history-item-payment">
+                <span th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                • <span th:text="${item.paymentMethod}"></span>
+                • Réf: <span th:text="${item.paymentReference}"></span>
+            </div>
+        </div>
+
+        <div th:if="${item.help and item.description != null}"
+             class="history-item-description" th:text="${item.description}">
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-refresh toutes les 30 secondes pour voir les mises à jour de vérification
+    setTimeout(function() {
+        window.location.reload();
+    }, 30000);
+
+    // Validation du formulaire
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const paymentRef = document.getElementById('paymentReference').value;
+        const validRefs = [
+            'MP250804.0904.A01637',
+            'MP250804.0908.D15807',
+            'MP250804.0910.A02057',
+            'MP250804.1224.B31974',
+            'MP250804.1224.B31976',
+            'MP250804.1856.D63944'
+        ];
+
+        if (!validRefs.includes(paymentRef)) {
+            alert('Veuillez utiliser une référence de paiement valide fournie dans l\'examen');
+            e.preventDefault();
+            return false;
+        }
+    });
+</script>
+</body>
+</html>
