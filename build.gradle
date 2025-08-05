@@ -109,7 +109,7 @@ jacocoTestReport {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
+    implementation 'org.postgresql:postgresql:42.7.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.1.0'
