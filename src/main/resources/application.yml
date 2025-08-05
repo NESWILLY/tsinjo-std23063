@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: tsinjo-std23063
+  profiles:
+    active: ${ENV:preprod}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: true
+
+# Configuration Vola
+vola:
+  api:
+    url: https://42cwka3n4ifcp7ufheyrpmph240iuaxo.lambda-url.eu-west-3.on.aws
+    key: API_KEY
+
+logging:
+  level:
+    com.hei.tsinjo: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN
+
+---
+spring:
+  config:
+    activate:
+      on-profile: preprod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tsinjo_preprod
+    username: ${DB_USERNAME:tsinjo}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tsinjo_prod
+    username: ${DB_USERNAME:tsinjo}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.hei.tsinjo: WARN
